@@ -20,10 +20,10 @@ ckeditor = CKEditor(app)
 Bootstrap(app)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("POSTGRES_DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-# db.create_all()
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -72,6 +72,9 @@ class User(UserMixin, db.Model):
     blog_posts = relationship("BlogPost", back_populates="author")
 
 
+db.create_all()
+
+
 # CONFIGURE TABLES
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
@@ -86,6 +89,9 @@ class BlogPost(db.Model):
     author = relationship("User", back_populates="blog_posts")
 
 
+db.create_all()
+
+
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
@@ -94,6 +100,10 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     post = relationship("BlogPost", back_populates="comments")
     author = relationship("User", back_populates="comments")
+
+
+
+db.create_all()
 
 
 
